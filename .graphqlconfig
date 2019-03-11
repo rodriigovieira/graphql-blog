@@ -1,0 +1,13 @@
+{
+    "projects": {
+        "prisma": {
+            "schemaPath": "src/generated/prisma.graphql",
+            "extensions": {
+                "prisma": "prisma/prisma.yml",
+                "endpoints": {
+                    "default": "https://us1.prisma.sh/rodrigo-vieira-a7c6bd/demo/test"
+                }
+            }
+        }
+    }
+}

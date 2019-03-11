@@ -1,0 +1,119 @@
+type Query {
+  users(query: String): [User!]!
+  posts(query: String): [Post!]!
+  comments: [Comment!]!
+  myPosts(published: Boolean): [Post!]!
+  post(id: ID!): Post!
+  me: User!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): UserAuthPayload!
+  loginUser(data: UserLoginInput!): UserAuthPayload!
+  updateUser(data: UpdateUserInput!): User!
+  deleteUser: User!
+
+  createPost(data: CreatePostInput!): Post!
+  updatePost(id: ID!, data: UpdatePostInput!): Post!
+  deletePost(id: ID!): Post!
+
+  createComment(data: CreateCommentInput!): Comment!
+  updateComment(id: ID!, data: UpdateCommentInput!): Comment!
+  deleteComment(id: ID!): Comment!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String
+  password: String!
+  posts: [Post!]!
+  comments: [Comment!]!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  password: String
+}
+
+type Post {
+  id: ID!
+  title: String!
+  body: String!
+  published: Boolean!
+  author: User!
+  comments: [Comment!]!
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+  published: Boolean!
+}
+
+input UpdatePostInput {
+  title: String
+  body: String
+  published: Boolean
+}
+
+
+type Comment {
+  id: ID!
+  text: String!
+  author: User!
+  post: Post!
+}
+
+input CreateCommentInput {
+  text: String!
+  post: ID!
+}
+
+input UpdateCommentInput {
+  text: String!
+}
+
+type UserAuthPayload {
+  user: User!
+  token: String!
+}
+
+type Subscription {
+  comment(postId: ID!): CommentSubscriptionPayload!
+  post(postId: ID): PostSubscriptionPayload!
+  myPost: MyPostSubscriptionPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+type PostSubscriptionPayload {
+  mutation: MutationType!
+  node: Post
+}
+
+type CommentSubscriptionPayload {
+  mutation: MutationType!
+  node: Comment
+}
+
+type MyPostSubscriptionPayload {
+  mutation: MutationType!
+  node: Post
+}
