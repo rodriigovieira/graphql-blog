@@ -26,9 +26,16 @@ const Query = {
   },
 
   async myPosts(parent, args, { prisma, request }, info) {
+    // Return all posts for this particular user,
+    // requiring the user to be authenticated.
     const userId = getUserId(request)
 
-    const opArgs = { where: { author: { id: userId } } }
+    const opArgs = {
+      where: { author: { id: userId } },
+      after: args.after,
+      skip: args.skip,
+      first: args.first,
+    }
 
     if (args.published !== null) {
       opArgs.where = {
@@ -41,17 +48,28 @@ const Query = {
   },
 
   users(parent, args, { db, prisma }, info) {
-    const opArgs = {}
+    // Destructuring and adding pagination/sorting support.
+    const { first, skip, query, after, orderBy } = args
 
-    if (args.query) {
-      opArgs.where = { name_contains: args.query }
+    const opArgs = { first, skip, after, orderBy }
+
+    if (query) {
+      opArgs.where = { name_contains: query }
     }
 
     return prisma.query.users(opArgs, info)
   },
 
   posts(parent, args, { db, prisma }, info) {
-    const opArgs = { where: { published: true } }
+    // Only allow published posts to be retrieved.
+    // Also, adding pagination support.
+    const opArgs = {
+      where: { published: true },
+      skip: args.skip,
+      first: args.first,
+      after: args.after,
+      orderBy: args.orderBy
+    }
 
     if (args.query) {
       opArgs.where = {
@@ -66,8 +84,11 @@ const Query = {
     return prisma.query.posts(opArgs, info)
   },
 
-  comments(parent, args, { db, prisma }, info) {
-    return prisma.query.comments(null, info)
+  comments(parent, { first, skip, after, orderBy }, { db, prisma }, info) {
+    // Pagination And Sorting Support
+    const opArgs = { first, skip, after, orderBy }
+    
+    return prisma.query.comments(opArgs, info)
   }
 }
 

@@ -13,7 +13,7 @@ const getUserId = (request, requireAuth = true) => {
   if (authKey) {
     const token = authKey.replace('Bearer ', '')
 
-    return jwt.verify(token, 'secret').userId
+    return jwt.verify(token, 'KDOWKODWOKDKO').userId
   }
 
   if (requireAuth) throw new Error('You need to be logged in.')
