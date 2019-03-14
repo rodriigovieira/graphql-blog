@@ -1,17 +1,18 @@
-import '@babel/polyfill'
+import '@babel/polyfill/noConflict'
+import server from './server'
 
-import { GraphQLServer, PubSub } from 'graphql-yoga'
+// import { GraphQLServer, PubSub } from 'graphql-yoga'
 
-import prisma from './prisma'
-import { resolvers, fragmentReplacements } from './resolvers'
+// import prisma from './prisma'
+// import { resolvers, fragmentReplacements } from './resolvers'
 
-const server = new GraphQLServer({
-  typeDefs: './src/schema.graphql',
-  resolvers,
-  context(request) {
-    return { prisma, request, PubSub }
-  },
-  fragmentReplacements
-})
+// const server = new GraphQLServer({
+//   typeDefs: './src/schema.graphql',
+//   resolvers,
+//   context(request) {
+//     return { prisma, request, PubSub }
+//   },
+//   fragmentReplacements
+// })
 
-server.start({ port: process.env.PORT || 4000 })
+server.start({ port: process.env.PORT || 4000 }, () => console.log('Ready'))

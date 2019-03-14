@@ -6,7 +6,8 @@
         "commonjs": true,
         "mocha": true,
         "mongo": true,
-        "es6": true
+        "es6": true,
+        "jest": true
     },
     "rules": {
         "space-before-function-paren": 0,
